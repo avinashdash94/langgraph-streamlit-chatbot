@@ -264,3 +264,31 @@ myenv\Scripts\activate
 ```
 
 Open the `.ipynb` file in VS Code and select **`myenv`** as the Jupyter Notebook kernel.
+
+
+13. Frontend UI - Streamlit
+This project uses Streamlit to create the frontend UI for the chatbot.
+
+Streamlit allows us to quickly build an interactive web-based UI for the chatbot using Python, without requiring a separate frontend framework.
+
+Install Streamlit
+
+Install Streamlit using:
+
+python -m pip install streamlit
+
+Streamlit Chatbot UI
+
+Streamlit provides built-in components that are useful for creating chatbot interfaces, such as:
+
+Chat message display
+Chat input
+Buttons
+Text input
+File upload
+Session state
+Streaming responses
+
+Run the Streamlit Frontend
+
+streamlit run .\streamlit_frontend.py

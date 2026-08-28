@@ -1,3 +1,11 @@
+# =========================================================
+#
+#use this file for Non-Streaming / Complete Response
+#
+# invoke() waits for the LLM to generate the complete response
+# and returns the entire result in one go.
+# Use this when the backend needs the complete response at once.
+# =========================================================
 from langgraph.graph import StateGraph, START, END
 from typing import TypedDict, Annotated
 from langchain_core.messages import BaseMessage, HumanMessage
@@ -25,7 +33,9 @@ def chat_node(state: ChatState):
     # send it  to llm
     response = client.chat.completions.create(
         model="openai/gpt-oss-120b",
+        # model="gpt-4o-mini",
         messages=groq_messages,
+        stream=True
     )
     # response store state
     answer = response.choices[0].message.content
@@ -33,6 +43,9 @@ def chat_node(state: ChatState):
 
 # MemorySaver is langgraph library to maintaining the chat state to remember the past conversation and continue the conversation from where it left off. It will save the state of the graph to a file and load it back when the graph is run again. It is useful for chatbots that need to maintain state across multiple runs.
 checkpointer = MemorySaver()
+# ---------------------------------------------------------
+# Build LangGraph
+# ---------------------------------------------------------
 graph = StateGraph(ChatState)
 # add Nodes to graph
 graph.add_node('chat_node', chat_node)
@@ -49,6 +62,7 @@ initial_state = {
     ]
 }
 
-config = { 'configurable':{'thread_id': 1}}  
-
+# bellow line to test how ai is returning the response to the user and print it in console.
+config = { 'configurable':{'thread_id': 'thread-1'}}  
 print(chatbot.invoke(initial_state, config=config)["messages"][-1].content)
+

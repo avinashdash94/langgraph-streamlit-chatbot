@@ -1,5 +1,7 @@
 # Environment variables and secrets
-
+.env
+.env.*
+!.env.example
 
 # Python virtual environments
 venv/
@@ -7,6 +9,7 @@ venv/
 env/
 .envdir/
 myenv/
+.env/
 
 # Python cache and build files
 __pycache__/

@@ -1,7 +1,7 @@
 import streamlit as st
-# use belwo chatbot from langgraph_backend.py to get the complete response at once instead of streaming response
-from langgraph_backend import chatbot
 
+#use below chatbot from langgraph_backend_streaming_data.py to get the streaming response
+from langgraph_backend_streaming import chatbot
 from langchain_core.messages import HumanMessage
 
 
@@ -28,9 +28,17 @@ if user_input:
     with st.chat_message("user"):
         st.text(user_input)
     
-    response = chatbot.invoke({"messages": [HumanMessage(content=user_input)]}, config=CONFIG)
-    ai_message = response["messages"][-1].content
-    # below line to display the assistant response in the chat message box
-    st.session_state['message_history'].append({"role": "assistant", "content": ai_message})
+    # below code will shod the ai response in UI
     with st.chat_message("assistant"):
-        st.text(ai_message)
+        # below code willl read the ai respose in sreaming mode and display it like typing effect.
+        # we will store that final response in ai_messge varaible to store in st.session_state['message_history'].
+        # so that it can be displayed in the chat message box as new messages and.
+        ai_messge = st.write_stream(
+            message_chunk.content for message_chunk, metadata in chatbot.stream(
+                {'messages': [HumanMessage(content=user_input)]},
+                config = { 'configurable':{'thread_id': 'thread-2'}}  ,
+                stream_mode = 'messages'
+            )
+        )
+
+    st.session_state['message_history'].append({"role": "assistant", "content": ai_messge})

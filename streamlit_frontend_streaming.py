@@ -22,7 +22,8 @@ for message in st.session_state['message_history']:
 # below line to read user input from the chat input box and store it in a variable called user_input
 user_input = st.chat_input("Type your message here...") 
 
-if user_input:
+if user_input and user_input.strip():
+    user_input = user_input.strip()
     # below line to display the user input in the chat message box
     st.session_state['message_history'].append({"role": "user", "content": user_input})
     with st.chat_message("user"):

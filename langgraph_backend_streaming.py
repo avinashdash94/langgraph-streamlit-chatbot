@@ -59,8 +59,11 @@ class ChatState(TypedDict):
 # No manual role conversion is required.
 # ---------------------------------------------------------
 def chat_node(state: ChatState):
+    messages = state.get("messages", [])
+    if not messages:
+        return {"messages": []}
 
-    response = llm.invoke(state["messages"])
+    response = llm.invoke(messages)
 
     return {
         "messages": [response]
@@ -123,3 +126,14 @@ for message_chunk, metadata in chatbot.stream(
             end="",
             flush=True
         )
+
+
+CONFIG = { 'configurable':{'thread_id': 'thread-1'}}  # st.session_state['thread_id'] is generated at the time of new  chat creation.
+response = chatbot.invoke(
+                {'messages': [HumanMessage(content='Hi My name is  Avinash.')]},
+                config = CONFIG,
+                stream_mode = 'messages'
+            )
+# To get the alll chatbot state for the thread-1 we can use get_state() method of chatbot.
+print('\nchat bot by me \n:')
+print(chatbot.get_state(config = CONFIG).values['messages'])  # Get the current state of the conversation for thread-1 

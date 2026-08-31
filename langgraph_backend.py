@@ -22,10 +22,14 @@ client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 class ChatState(TypedDict):
     messages: Annotated[list[BaseMessage], add_messages]
 
-def chat_node(state: ChatState): 
+def chat_node(state: ChatState):
+    messages = state.get("messages", [])
+    if not messages:
+        return {"messages": []}
+
     
     groq_messages = []
-    for message in state["messages"]:
+    for message in messages:
         groq_messages.append({
             "role": "user",
             "content": message.content,

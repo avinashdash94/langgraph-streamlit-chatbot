@@ -292,3 +292,23 @@ Streamlit provides built-in components that are useful for creating chatbot inte
 Run the Streamlit Frontend
 
 streamlit run .\streamlit_frontend.py
+
+## 14. Persistent Memory with SQLite
+
+LangGraph can save graph checkpoints to SQLite so that conversation state is available after the application restarts. This allows the chatbot to remember previous messages for a conversation thread instead of keeping state only in memory.
+
+### Install the SQLite Checkpointer
+
+```bash
+pip install langgraph-checkpoint-sqlite
+```
+
+The package provides `SqliteSaver` for synchronous applications and `AsyncSqliteSaver` for asynchronous applications. It stores LangGraph checkpoints in a SQLite database file.
+
+### Why Use SQLite for Persistent Memory?
+
+- **Persistent:** Data remains available after the chatbot or Python process stops.
+- **Thread-based memory:** Checkpoints can be stored and loaded using a LangGraph `thread_id`.
+- **Simple setup:** SQLite is file-based and does not require a separate database server.
+- **Good for local apps:** It is lightweight and useful for development, testing, and small deployments.
+- **Conversation recovery:** The graph can continue from previously saved state when the same thread is used again.
